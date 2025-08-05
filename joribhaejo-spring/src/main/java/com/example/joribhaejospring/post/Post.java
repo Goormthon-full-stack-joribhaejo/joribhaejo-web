@@ -33,6 +33,10 @@ public class Post {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category")
+    private PostCategory category;
+
     @Column(name = "view_count", nullable = false)
     private Integer viewCount;
 
@@ -41,4 +45,8 @@ public class Post {
 
     @Column(name = "updated_at", insertable = false, updatable = false)
     private LocalDateTime updatedAt;
+
+    public enum PostCategory {
+        WEB, MOBILE, BACK, HARD, AI, NETWORK, SECURITY, DEVOPS, ETC
+    }
 }

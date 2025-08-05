@@ -1,0 +1,38 @@
+package com.example.joribhaejospring.comment.dto;
+
+import com.example.joribhaejospring.comment.Comment;
+import com.example.joribhaejospring.post.Post;
+import com.example.joribhaejospring.user.User;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class CommentResponse {
+    private Integer id;
+    private Integer postId;
+    private Integer authorId;
+    private Integer parentCommentId;
+    private String content;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    public static CommentResponse fromEntity(Comment comment) {
+        return CommentResponse.builder()
+                .id(comment.getId())
+                .postId(comment.getPost().getId())
+                .authorId(comment.getAuthor().getId())
+                .parentCommentId(comment.getParentComment().getId())
+                .content(comment.getContent())
+                .createdAt(comment.getCreatedAt())
+                .updatedAt(comment.getUpdatedAt())
+                .build();
+    }
+}

@@ -1,5 +1,6 @@
 package com.example.joribhaejospring.board;
 
+import com.example.joribhaejospring.board.dto.BoardResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

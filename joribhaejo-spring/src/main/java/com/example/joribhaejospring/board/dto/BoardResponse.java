@@ -1,5 +1,6 @@
-package com.example.joribhaejospring.board;
+package com.example.joribhaejospring.board.dto;
 
+import com.example.joribhaejospring.board.Board;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

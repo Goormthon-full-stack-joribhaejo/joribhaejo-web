@@ -32,9 +32,7 @@ public class UserController {
 
     // 내 정보 조회
     @GetMapping("/me")
-    public ResponseEntity<UserResponse> getMyInfo(
-            @RequestHeader String currentUserId
-    ) {
+    public ResponseEntity<UserResponse> getMyInfo() {
         UserResponse user = userService.getMyInfo();
 
         return ResponseEntity.ok(user);

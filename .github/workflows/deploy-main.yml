@@ -22,6 +22,10 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Grant execute permission to gradlew
+        working-directory: ./joribhaejo-spring
+        run: chmod +x ./gradlew
+
       - name: Build JAR
         working-directory: ./joribhaejo-spring
         run: ./gradlew bootJar

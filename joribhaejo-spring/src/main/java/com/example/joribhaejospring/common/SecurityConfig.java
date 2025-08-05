@@ -29,7 +29,7 @@ public class SecurityConfig {
                         .anyRequest().permitAll() // 모든 요청 허용
                 )
                 .formLogin(AbstractHttpConfigurer::disable)   // 기본 폼 로그인 비활성화
-                .httpBasic(AbstractHttpConfigurer::disable);;
+                .httpBasic(AbstractHttpConfigurer::disable);
         return http.build();
     }
 

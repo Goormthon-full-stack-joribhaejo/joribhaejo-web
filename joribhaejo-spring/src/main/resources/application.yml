@@ -1,4 +1,6 @@
 spring:
+#  profiles:
+#    active: dev
   application:
     name: joribhaejo-spring
   jpa:
@@ -15,7 +17,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/jorib_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://jorib-mysql:3306/jorib_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: jorib_dml
     password: password
 jwt:

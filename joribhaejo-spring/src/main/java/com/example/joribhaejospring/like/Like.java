@@ -1,4 +1,4 @@
-package com.example.joribhaejospring.Like;
+package com.example.joribhaejospring.like;
 
 import jakarta.persistence.*;
 import lombok.*;

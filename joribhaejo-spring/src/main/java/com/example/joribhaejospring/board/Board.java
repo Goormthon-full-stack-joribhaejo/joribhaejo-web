@@ -1,4 +1,5 @@
 package com.example.joribhaejospring.board;
+
 import jakarta.persistence.*;
 import lombok.*;
 

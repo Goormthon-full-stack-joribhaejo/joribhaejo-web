@@ -9,11 +9,12 @@ import com.example.joribhaejospring.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.net.URI;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +38,7 @@ public class PostService {
     @Transactional
     public PostResponse getPostAndIncreaseViewCount(Integer postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+                .orElseThrow(() -> new NoSuchElementException("Post not found"));
 
         post.setViewCount(post.getViewCount() + 1);
         return PostResponse.fromEntity(postRepository.save(post));
@@ -48,7 +49,7 @@ public class PostService {
     public PostResponse createPost(PostCreateRequest request) {
         User author = getCurrentUser();
         Board board = boardRepository.findById(request.getBoardId())
-                .orElseThrow(() -> new RuntimeException("Board not found"));
+                .orElseThrow(() -> new NoSuchElementException("Board not found"));
 
         Post post = Post.builder()
                 .board(board)
@@ -64,12 +65,14 @@ public class PostService {
 
     // 게시글 수정 (작성자만 가능)
     @Transactional
-    public void updatePost(Integer postId, PostUpdateRequest request, User user) {
+    public void updatePost(Integer postId, PostUpdateRequest request) {
+        User user = getCurrentUser();
+
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+                .orElseThrow(() -> new NoSuchElementException("Post not found"));
 
         if (!post.getAuthor().getId().equals(user.getId())) {
-            throw new SecurityException("Unauthorized");
+            throw new AccessDeniedException("Unauthorized");
         }
 
         post.setTitle(request.getTitle());
@@ -79,12 +82,14 @@ public class PostService {
 
     // 게시글 삭제 (작성자만 가능)
     @Transactional
-    public void deletePost(Integer postId, User user) {
+    public void deletePost(Integer postId) {
+        User user = getCurrentUser();
+
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+                .orElseThrow(() -> new NoSuchElementException("Post not found"));
 
         if (!post.getAuthor().getId().equals(user.getId())) {
-            throw new SecurityException("Unauthorized");
+            throw new AccessDeniedException("Unauthorized");
         }
 
         postRepository.delete(post);

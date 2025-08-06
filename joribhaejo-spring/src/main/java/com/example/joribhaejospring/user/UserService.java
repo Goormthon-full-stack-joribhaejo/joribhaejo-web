@@ -1,11 +1,13 @@
 package com.example.joribhaejospring.user;
 
 import com.example.joribhaejospring.common.JwtUtil;
+import com.example.joribhaejospring.common.exception.DuplicateRequestException;
 import com.example.joribhaejospring.user.dto.LoginRequest;
 import com.example.joribhaejospring.user.dto.LoginResponse;
 import com.example.joribhaejospring.user.dto.SignupRequest;
 import com.example.joribhaejospring.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,10 +22,10 @@ public class UserService {
 
     public void signup(SignupRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("Username already exists");
+            throw new DuplicateRequestException("Username already exists");
         }
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already exists");
+            throw new DuplicateRequestException("Email already exists");
         }
 
         User user = User.builder()
@@ -37,10 +39,10 @@ public class UserService {
 
     public LoginResponse login(LoginRequest request) {
         User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new RuntimeException("Invalid username or password"));
+                .orElseThrow(() -> new BadCredentialsException("Invalid username"));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid username or password");
+            throw new BadCredentialsException("Invalid username or password");
         }
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

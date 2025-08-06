@@ -7,11 +7,13 @@ import com.example.joribhaejospring.post.Post;
 import com.example.joribhaejospring.post.PostRepository;
 import com.example.joribhaejospring.user.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -31,12 +33,12 @@ public class CommentService {
         User user = getCurrentUser();
 
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+                .orElseThrow(() -> new NoSuchElementException("게시글을 찾을 수 없습니다."));
 
         Comment parent = null;
         if (request.getParentCommentId() != null) {
             parent = commentRepository.findById(request.getParentCommentId())
-                    .orElseThrow(() -> new RuntimeException("Parent comment not found"));
+                    .orElseThrow(() -> new NoSuchElementException("해당 댓글을 찾을 수 없습니다."));
         }
 
         Comment comment = Comment.builder()
@@ -54,10 +56,10 @@ public class CommentService {
         User user = getCurrentUser();
 
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new RuntimeException("Comment not found"));
+                .orElseThrow(() -> new NoSuchElementException("해당 댓글을 찾을 수 없습니다."));
 
         if (!comment.getAuthor().getId().equals(user.getId())) {
-            throw new RuntimeException("Unauthorized");
+            throw new AccessDeniedException("Unauthorized");
         }
 
         comment.setContent(request.getContent());
@@ -69,10 +71,10 @@ public class CommentService {
         User user = getCurrentUser();
 
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new RuntimeException("Comment not found"));
+                .orElseThrow(() -> new NoSuchElementException("댓글을 찾을 수 없습니다."));
 
         if (!comment.getAuthor().getId().equals(user.getId())) {
-            throw new RuntimeException("Unauthorized");
+            throw new AccessDeniedException("Unauthorized");
         }
 
         commentRepository.delete(comment);

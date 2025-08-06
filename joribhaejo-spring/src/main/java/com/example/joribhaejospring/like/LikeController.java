@@ -31,12 +31,12 @@ public class LikeController {
             security = @SecurityRequirement(name = "Authorization")
     )
     @PostMapping
-    public ResponseEntity<Void> createLike(
+    public ResponseEntity<String> createLike(
             @RequestParam Like.TargetType targetType,
             @RequestParam Integer targetId
     ) {
         likeService.createLike(targetType, targetId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("좋아요 성공");
     }
 
     @Operation(
@@ -45,13 +45,13 @@ public class LikeController {
             security = @SecurityRequirement(name = "Authorization")
     )
     @DeleteMapping
-    public ResponseEntity<Void> deleteLike(
+    public ResponseEntity<String> deleteLike(
             @RequestParam Like.TargetType targetType,
             @RequestParam Integer targetId
     ) {
         likeService.deleteLike(targetType, targetId);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("좋아요 취소 성공");
     }
 
 }

@@ -32,12 +32,12 @@ public class CommentController {
             security = @SecurityRequirement(name = "Authorization")
     )
     @PostMapping("/comments/{postId}")
-    public ResponseEntity<Void> createComment(
+    public ResponseEntity<String> createComment(
             @RequestBody CommentCreateRequest request,
             @PathVariable Integer postId
     ) {
         commentService.createComment(request, postId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("댓글 작성 성공");
     }
 
     @Operation(
@@ -46,13 +46,13 @@ public class CommentController {
             security = @SecurityRequirement(name = "Authorization")
     )
     @PutMapping("/comments/{commentId}")
-    public ResponseEntity<Void> updateComment(
+    public ResponseEntity<String> updateComment(
             @PathVariable Integer commentId,
             @RequestBody CommentUpdateRequest request
     ) {
         commentService.updateComment(commentId, request);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("댓글 수정 성공");
     }
 
     @Operation(
@@ -61,9 +61,9 @@ public class CommentController {
             security = @SecurityRequirement(name = "Authorization")
     )
     @DeleteMapping("/comments/{commentId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Integer commentId) {
+    public ResponseEntity<String> deleteComment(@PathVariable Integer commentId) {
         commentService.deleteComment(commentId);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("댓글 삭제 성공");
     }
 }

@@ -1,12 +1,12 @@
 package com.example.joribhaejospring.post;
 
+import com.example.joribhaejospring.post.dto.PageResponse;
 import com.example.joribhaejospring.post.dto.PostCreateRequest;
 import com.example.joribhaejospring.post.dto.PostResponse;
 import com.example.joribhaejospring.post.dto.PostUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,15 +22,15 @@ public class PostController {
             description = ""
     )
     @GetMapping
-    public ResponseEntity<Page<Post>> getPosts(
+    public ResponseEntity<PageResponse<Post>> getPosts(
             @RequestParam Integer boardId,
             @RequestParam(required = false) String search,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) Post.PostCategory category
     ) {
-        Page<Post> posts = postService.getPosts(boardId, search, category, PageRequest.of(page, size));
-        return ResponseEntity.ok(posts);
+        ;
+        return ResponseEntity.ok(postService.getPosts(boardId, search, category, PageRequest.of(page, size)));
     }
 
     @Operation(

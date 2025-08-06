@@ -58,9 +58,9 @@ public class PostController {
             security = @SecurityRequirement(name = "Authorization")
     )
     @PutMapping("/{postId}")
-    public ResponseEntity<Void> updatePost(@PathVariable Integer postId, @RequestBody PostUpdateRequest request) {
+    public ResponseEntity<String> updatePost(@PathVariable Integer postId, @RequestBody PostUpdateRequest request) {
         postService.updatePost(postId, request);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("게시글 수정 성공");
     }
 
     @Operation(
@@ -69,9 +69,9 @@ public class PostController {
             security = @SecurityRequirement(name = "Authorization")
     )
     @DeleteMapping("/{postId}")
-    public ResponseEntity<Void> deletePost(@PathVariable Integer postId) {
+    public ResponseEntity<String> deletePost(@PathVariable Integer postId) {
         postService.deletePost(postId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("게시글 삭제 성공");
     }
 }
 

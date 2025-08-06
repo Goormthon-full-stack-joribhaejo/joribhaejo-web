@@ -60,8 +60,8 @@ public class MessageController {
             description = "",
             security = @SecurityRequirement(name = "Authorization")
     )    @DeleteMapping("/{messageId}")
-    public ResponseEntity<Void> deleteMessage(@PathVariable Integer messageId) {
+    public ResponseEntity<String> deleteMessage(@PathVariable Integer messageId) {
         messageService.deleteMessage(messageId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("쪽지 삭제 성공");
     }
 }

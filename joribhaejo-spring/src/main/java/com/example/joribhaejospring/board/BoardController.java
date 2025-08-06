@@ -24,7 +24,6 @@ public class BoardController {
         return ResponseEntity.ok(boards);
     }
 
-
     @Operation(
             summary = "게시판 추가",
             description = "테스트용"
@@ -56,7 +55,7 @@ public class BoardController {
             summary = "게시판 삭제",
             description = "테스트용"
     )
-    @PutMapping("/{boardId}")
+    @DeleteMapping("/{boardId}")
     public ResponseEntity<String> deleteBoard(
             @PathVariable Integer boardId
     ) {

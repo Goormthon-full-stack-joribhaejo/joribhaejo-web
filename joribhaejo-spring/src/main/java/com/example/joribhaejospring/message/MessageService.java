@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +30,7 @@ public class MessageService {
 
     public MessageDto getMessageDetail(Integer messageId) {
         Message message = messageRepository.findById(messageId)
-                .orElseThrow(() -> new RuntimeException("Message not found"));
+                .orElseThrow(() -> new NoSuchElementException("Message not found"));
 
         return MessageDto.fromEntity(message);
     }
@@ -37,7 +38,7 @@ public class MessageService {
     public MessageDto sendMessage(Integer receiverId, String content) {
         User sender = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User receiver = userRepository.findById(receiverId)
-                .orElseThrow(() -> new RuntimeException("Receiver not found"));
+                .orElseThrow(() -> new NoSuchElementException("Receiver not found"));
 
         Message message = Message.builder()
                 .sender(sender)
@@ -53,7 +54,7 @@ public class MessageService {
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Message message = messageRepository.findById(messageId)
-                .orElseThrow(() -> new RuntimeException("Message not found"));
+                .orElseThrow(() -> new NoSuchElementException("Message not found"));
 
         if (!message.getReceiver().getId().equals(currentUser.getId())) {
             throw new AccessDeniedException("No permission to delete this message");

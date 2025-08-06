@@ -18,12 +18,22 @@ public class PostResponse {
     private String content;
     private Post.PostCategory category;
     private Integer viewCount;
+    private Integer likeCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static PostResponse fromEntity(Post post) {
+    public static PostResponse fromEntity(Post post, Integer likeCount) {
         return PostResponse.builder()
                 .id(post.getId())
+                .boardId(post.getBoard().getId())
+                .authorId(post.getAuthor().getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .category(post.getCategory())
+                .viewCount(post.getViewCount())
+                .likeCount(likeCount)
+                .createdAt(post.getCreatedAt())
+                .updatedAt(post.getUpdatedAt())
                 .build();
     }
 }

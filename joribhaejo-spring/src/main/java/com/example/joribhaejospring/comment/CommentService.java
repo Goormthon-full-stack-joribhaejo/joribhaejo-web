@@ -3,6 +3,8 @@ package com.example.joribhaejospring.comment;
 import com.example.joribhaejospring.comment.dto.CommentCreateRequest;
 import com.example.joribhaejospring.comment.dto.CommentResponse;
 import com.example.joribhaejospring.comment.dto.CommentUpdateRequest;
+import com.example.joribhaejospring.like.Like;
+import com.example.joribhaejospring.like.LikeRepository;
 import com.example.joribhaejospring.post.Post;
 import com.example.joribhaejospring.post.PostRepository;
 import com.example.joribhaejospring.user.User;
@@ -19,13 +21,17 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
+    private final LikeRepository likeRepository;
     private final PostRepository postRepository;
 
     @Transactional(readOnly = true)
     public List<CommentResponse> getCommentsByPost(Integer postId) {
         List<Comment> comments = commentRepository.findByPostId(postId);
 
-        return comments.stream().map(CommentResponse::fromEntity).toList();
+        return comments.stream().map((comment) -> {
+            Integer likes = likeRepository.countByTargetTypeAndTargetId(Like.TargetType.COMMENT, postId);
+            return CommentResponse.fromEntity(comment, likes);
+        }).toList();
     }
 
     @Transactional

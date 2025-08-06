@@ -1,5 +1,7 @@
 package com.example.joribhaejospring.like;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +12,10 @@ import org.springframework.web.bind.annotation.*;
 public class LikeController {
     private final LikeService likeService;
 
-    // 좋아요 상태 조회 (비회원도 가능)
+    @Operation(
+            summary = "좋아요 상태 조회",
+            description = ""
+    )
     @GetMapping
     public ResponseEntity<Boolean> checkLike(
             @RequestParam Like.TargetType targetType,
@@ -20,7 +25,11 @@ public class LikeController {
         return ResponseEntity.ok(liked);
     }
 
-    // 좋아요 생성 (회원만)
+    @Operation(
+            summary = "좋아요 생성",
+            description = "",
+            security = @SecurityRequirement(name = "Authorization")
+    )
     @PostMapping
     public ResponseEntity<Void> createLike(
             @RequestParam Like.TargetType targetType,
@@ -30,7 +39,11 @@ public class LikeController {
         return ResponseEntity.ok().build();
     }
 
-    // 좋아요 취소 (회원만)
+    @Operation(
+            summary = "좋아요 취소",
+            description = "",
+            security = @SecurityRequirement(name = "Authorization")
+    )
     @DeleteMapping
     public ResponseEntity<Void> deleteLike(
             @RequestParam Like.TargetType targetType,

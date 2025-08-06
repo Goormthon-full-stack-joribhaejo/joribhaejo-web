@@ -2,6 +2,8 @@ package com.example.joribhaejospring.post;
 
 import com.example.joribhaejospring.board.Board;
 import com.example.joribhaejospring.board.BoardRepository;
+import com.example.joribhaejospring.like.Like;
+import com.example.joribhaejospring.like.LikeRepository;
 import com.example.joribhaejospring.post.dto.PageResponse;
 import com.example.joribhaejospring.post.dto.PostCreateRequest;
 import com.example.joribhaejospring.post.dto.PostResponse;
@@ -22,6 +24,7 @@ import java.util.NoSuchElementException;
 public class PostService {
     private final PostRepository postRepository;
     private final BoardRepository boardRepository;
+    private final LikeRepository likeRepository;
 
     // 게시글 목록 조회 (검색, 필터)
     public PageResponse<Post> getPosts(Integer boardId, String search, Post.PostCategory category, Pageable pageable) {
@@ -45,7 +48,8 @@ public class PostService {
                 .orElseThrow(() -> new NoSuchElementException("Post not found"));
 
         post.setViewCount(post.getViewCount() + 1);
-        return PostResponse.fromEntity(postRepository.save(post));
+        Integer likeCount = likeRepository.countByTargetTypeAndTargetId(Like.TargetType.POST, postId);
+        return PostResponse.fromEntity(postRepository.save(post), likeCount);
     }
 
     // 게시글 작성
@@ -64,7 +68,7 @@ public class PostService {
                 .viewCount(0)
                 .build();
 
-        return PostResponse.fromEntity(postRepository.save(post));
+        return PostResponse.fromEntity(postRepository.save(post), 0);
     }
 
     // 게시글 수정 (작성자만 가능)

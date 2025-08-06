@@ -15,6 +15,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.List;
+
 @Configuration
 public class SecurityConfig {
     // 모든 요청 허용
@@ -36,8 +38,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOriginPattern("*"); // 모든 Origin 허용 (개발용)
-        config.addAllowedMethod("*");        // 모든 HTTP 메서드 허용
+        config.addAllowedOriginPattern("http://jorib.mobidic.shop"); // 모든 Origin 허용 (개발용)
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         config.addAllowedHeader("*");        // 모든 헤더 허용
         config.setAllowCredentials(true);    // 인증 정보 포함 허용 (쿠키 등)
 

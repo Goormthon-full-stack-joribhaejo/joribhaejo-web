@@ -2,6 +2,7 @@ package com.example.joribhaejospring.post;
 
 import com.example.joribhaejospring.board.Board;
 import com.example.joribhaejospring.board.BoardRepository;
+import com.example.joribhaejospring.post.dto.PageResponse;
 import com.example.joribhaejospring.post.dto.PostCreateRequest;
 import com.example.joribhaejospring.post.dto.PostResponse;
 import com.example.joribhaejospring.post.dto.PostUpdateRequest;
@@ -23,15 +24,18 @@ public class PostService {
     private final BoardRepository boardRepository;
 
     // 게시글 목록 조회 (검색, 필터)
-    public Page<Post> getPosts(Integer boardId, String search, Post.PostCategory category, Pageable pageable) {
+    public PageResponse<Post> getPosts(Integer boardId, String search, Post.PostCategory category, Pageable pageable) {
         String keyword = (search == null) ? "" : search;
 
+        Page<Post> page;
         if (category == null) {
             // 카테고리 조건 없이 조회
-            return postRepository.findByBoardIdAndTitleContainingIgnoreCase(boardId, keyword, pageable);
+            page = postRepository.findByBoardIdAndTitleContainingIgnoreCase(boardId, keyword, pageable);
         } else {
-            return postRepository.findByBoardIdAndCategoryAndTitleContainingIgnoreCase(boardId, category, keyword, pageable);
+            page = postRepository.findByBoardIdAndCategoryAndTitleContainingIgnoreCase(boardId, category, keyword, pageable);
         }
+
+        return PageResponse.fromPage(page);
     }
 
     // 게시글 상세 조회 + 조회수 증가

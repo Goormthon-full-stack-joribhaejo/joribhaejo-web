@@ -61,7 +61,7 @@ public class GlobalExceptionHandler {
                 e, request.getRequestURI(), e.getMessage());
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(e.getMessage());
+                .body("Internal Server Error (RuntimeException)");
     }
 
     @ExceptionHandler(Exception.class)
@@ -71,6 +71,6 @@ public class GlobalExceptionHandler {
                 e, request.getRequestURI(), e.getMessage());
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Internal Server Error");
+                .body("Internal Server Error (Exception)");
     }
 }

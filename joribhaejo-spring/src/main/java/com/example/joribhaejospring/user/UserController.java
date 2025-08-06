@@ -5,6 +5,8 @@ import com.example.joribhaejospring.user.dto.LoginRequest;
 import com.example.joribhaejospring.user.dto.LoginResponse;
 import com.example.joribhaejospring.user.dto.SignupRequest;
 import com.example.joribhaejospring.user.dto.UserResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,21 +18,31 @@ public class UserController {
 
     private final UserService userService;
 
-    // 회원가입
+    @Operation(
+            summary = "회원가입",
+            description = ""
+    )
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignupRequest request) {
         userService.signup(request);
         return ResponseEntity.ok().build();
     }
-
-    // 로그인
+    
+    @Operation(
+            summary = "로그인",
+            description = ""
+    )
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         LoginResponse response = userService.login(request);
         return ResponseEntity.ok(response);
     }
 
-    // 내 정보 조회
+    @Operation(
+            summary = "내 정보 조회",
+            description = "",
+            security = @SecurityRequirement(name = "Authorization")
+    )
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getMyInfo() {
         UserResponse user = userService.getMyInfo();

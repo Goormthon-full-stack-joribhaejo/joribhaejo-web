@@ -29,6 +29,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                                 .requestMatchers(HttpMethod.POST, "/api/users/login", "/api/users/signup").permitAll()
+                                .requestMatchers("/error", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/posts/*", "/api/posts", "/api/posts/*/comments").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/likes", "/api/boards").permitAll()
                                 .anyRequest().authenticated() // 그 외 모든 요청은 인증 필요

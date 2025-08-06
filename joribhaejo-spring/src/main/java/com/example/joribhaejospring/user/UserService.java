@@ -5,6 +5,7 @@ import com.example.joribhaejospring.common.exception.DuplicateRequestException;
 import com.example.joribhaejospring.user.dto.LoginRequest;
 import com.example.joribhaejospring.user.dto.LoginResponse;
 import com.example.joribhaejospring.user.dto.SignupRequest;
+import com.example.joribhaejospring.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
@@ -50,5 +51,11 @@ public class UserService {
                 .id(user.getId())
                 .accessToken(jwtUtil.generateAccessToken(auth))
                 .build();
+    }
+
+    public UserResponse getMyInfo() {
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return new UserResponse(currentUser.getId(), currentUser.getUsername(), currentUser.getEmail());
     }
 }

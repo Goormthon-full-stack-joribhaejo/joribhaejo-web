@@ -8,6 +8,7 @@ import com.example.joribhaejospring.user.dto.SignupRequest;
 import com.example.joribhaejospring.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,7 +46,9 @@ public class UserService {
             throw new BadCredentialsException("Invalid username or password");
         }
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Authentication auth = new UsernamePasswordAuthenticationToken(
+                user.getUsername(), user.getPassword(), user.getAuthorities()
+        );
 
         return LoginResponse.builder()
                 .id(user.getId())

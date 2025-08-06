@@ -47,7 +47,7 @@ public class UserService {
         }
 
         Authentication auth = new UsernamePasswordAuthenticationToken(
-                user.getUsername(), user.getPassword(), user.getAuthorities()
+                user, user.getPassword(), user.getAuthorities()
         );
 
         return LoginResponse.builder()

@@ -3,15 +3,11 @@ package com.example.joribhaejospring.post;
 import com.example.joribhaejospring.post.dto.PostCreateRequest;
 import com.example.joribhaejospring.post.dto.PostResponse;
 import com.example.joribhaejospring.post.dto.PostUpdateRequest;
-import com.example.joribhaejospring.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -40,28 +36,22 @@ public class PostController {
 
     // 게시글 작성
     @PostMapping
-    public ResponseEntity<Void> createPost(@RequestBody PostCreateRequest request) {
-        return ResponseEntity.created(URI.create("/api/posts"+postService.createPost(request).getId())).build();
+    public ResponseEntity<PostResponse> createPost(@RequestBody PostCreateRequest request) {
+        return ResponseEntity.ok(postService.createPost(request));
     }
 
     // 게시글 수정 (작성자만 가능)
     @PutMapping("/{postId}")
     public ResponseEntity<Void> updatePost(@PathVariable Integer postId, @RequestBody PostUpdateRequest request) {
-        User user = getCurrentUser();
-        postService.updatePost(postId, request, user);
-        return ResponseEntity.noContent().build();
+        postService.updatePost(postId, request);
+        return ResponseEntity.ok().build();
     }
 
     // 게시글 삭제 (작성자만 가능)
     @DeleteMapping("/{postId}")
     public ResponseEntity<Void> deletePost(@PathVariable Integer postId) {
-        User user = getCurrentUser();
-        postService.deletePost(postId, user);
-        return ResponseEntity.noContent().build();
-    }
-
-    private User getCurrentUser() {
-        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        postService.deletePost(postId);
+        return ResponseEntity.ok().build();
     }
 }
 

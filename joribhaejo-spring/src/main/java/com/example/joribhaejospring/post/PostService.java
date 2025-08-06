@@ -65,7 +65,9 @@ public class PostService {
 
     // 게시글 수정 (작성자만 가능)
     @Transactional
-    public void updatePost(Integer postId, PostUpdateRequest request, User user) {
+    public void updatePost(Integer postId, PostUpdateRequest request) {
+        User user = getCurrentUser();
+
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NoSuchElementException("Post not found"));
 
@@ -80,7 +82,9 @@ public class PostService {
 
     // 게시글 삭제 (작성자만 가능)
     @Transactional
-    public void deletePost(Integer postId, User user) {
+    public void deletePost(Integer postId) {
+        User user = getCurrentUser();
+
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NoSuchElementException("Post not found"));
 

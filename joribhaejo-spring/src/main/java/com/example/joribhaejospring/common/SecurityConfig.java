@@ -2,6 +2,7 @@ package com.example.joribhaejospring.common;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -27,8 +28,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        //.anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
-                        .anyRequest().permitAll() // 모든 요청 허용
+                                .requestMatchers(HttpMethod.POST, "/api/users/login", "/api/users/signup").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/posts/*", "/api/posts", "/api/posts/*/comments").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/likes", "/api/boards").permitAll()
+                                .anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
+                        //.anyRequest().permitAll() // 모든 요청 허용
                 )
                 .formLogin(AbstractHttpConfigurer::disable)   // 기본 폼 로그인 비활성화
                 .httpBasic(AbstractHttpConfigurer::disable);

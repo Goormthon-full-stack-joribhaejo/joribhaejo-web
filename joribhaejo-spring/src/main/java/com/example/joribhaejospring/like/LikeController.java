@@ -26,32 +26,16 @@ public class LikeController {
     }
 
     @Operation(
-            summary = "좋아요 생성",
+            summary = "좋아요 토글",
             description = "",
             security = @SecurityRequirement(name = "Authorization")
     )
     @PostMapping
-    public ResponseEntity<String> createLike(
+    public ResponseEntity<String> toggleLike(
             @RequestParam Like.TargetType targetType,
             @RequestParam Integer targetId
     ) {
-        likeService.createLike(targetType, targetId);
-        return ResponseEntity.ok("좋아요 성공");
+        likeService.toggleLike(targetType, targetId);
+        return ResponseEntity.ok("좋아요 토글");
     }
-
-    @Operation(
-            summary = "좋아요 취소",
-            description = "",
-            security = @SecurityRequirement(name = "Authorization")
-    )
-    @DeleteMapping
-    public ResponseEntity<String> deleteLike(
-            @RequestParam Like.TargetType targetType,
-            @RequestParam Integer targetId
-    ) {
-        likeService.deleteLike(targetType, targetId);
-
-        return ResponseEntity.ok("좋아요 취소 성공");
-    }
-
 }

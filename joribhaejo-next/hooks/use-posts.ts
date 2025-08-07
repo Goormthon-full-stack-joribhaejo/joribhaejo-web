@@ -196,4 +196,17 @@ export function useDeleteComment() {
       queryClient.invalidateQueries({ queryKey: ['comments'] })
     },
   })
+}
+
+// 댓글 좋아요 토글 훅
+export function useToggleCommentLike() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: commentApi.toggleCommentLike,
+    onSuccess: (_, commentId) => {
+      // 댓글 목록 캐시 무효화
+      queryClient.invalidateQueries({ queryKey: ['comments'] })
+    },
+  })
 } 

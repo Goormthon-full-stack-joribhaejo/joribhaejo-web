@@ -22,6 +22,7 @@ public class CommentResponse {
     private Integer id;
     private Integer postId;
     private Integer authorId;
+    private String authorName;
     private Integer parentCommentId;
     private String content;
     private Integer likeCount;
@@ -33,6 +34,7 @@ public class CommentResponse {
                 .id(comment.getId())
                 .postId(comment.getPost().getId())
                 .authorId(comment.getAuthor().getId())
+                .authorName(comment.getAuthor().getUsername())
                 .likeCount(likeCount)
                 .parentCommentId(comment.getParentComment() != null ? comment.getParentComment().getId() : null)
                 .content(comment.getContent())

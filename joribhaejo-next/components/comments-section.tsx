@@ -80,14 +80,13 @@ export function CommentsSection({ postId }: CommentsSectionProps) {
           comments.map((comment) => (
             <div key={comment.id} className="flex items-start space-x-4 p-4 bg-gray-700 dark:bg-gray-700 rounded-lg">
               <Avatar className="w-10 h-10">
-                <AvatarImage src="/placeholder-user.jpg" />
                 <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
-                  {comment.author[0]}
+                  {comment.authorId}
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-gray-100 dark:text-gray-100">{comment.author}</span>
+                  <span className="font-semibold text-gray-100 dark:text-gray-100">User {comment.authorId}</span>
                   <span className="text-sm text-gray-400 dark:text-gray-400">
                     {new Date(comment.createdAt).toLocaleDateString('ko-KR', {
                       year: 'numeric',

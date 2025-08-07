@@ -162,8 +162,8 @@ export function useCreateComment() {
   const queryClient = useQueryClient()
   
   return useMutation({
-    mutationFn: ({ postId, content }: { postId: number; content: string }) =>
-      commentApi.createComment(postId, content),
+    mutationFn: ({ postId, content, parentCommentId }: { postId: number; content: string; parentCommentId?: number }) =>
+      commentApi.createComment(postId, content, parentCommentId),
     onSuccess: (_, { postId }) => {
       // 댓글 목록 캐시 무효화
       queryClient.invalidateQueries({ queryKey: ['comments', postId] })

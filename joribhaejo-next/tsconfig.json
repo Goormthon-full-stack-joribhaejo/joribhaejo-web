@@ -2,7 +2,7 @@
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
-    "target": "ES6",
+    "target": "es5", // ES6도 괜찮지만, Next.js 기본값인 es5가 더 안전합니다.
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
@@ -18,8 +18,9 @@
         "name": "next"
       }
     ],
+    "baseUrl": ".",   // <--- 이 부분이 추가되었습니다! (가장 중요)
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"] // './*'는 baseUrl인 '.'을 기준으로 하므로, 프로젝트 루트를 의미하게 됩니다.
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

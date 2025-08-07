@@ -133,7 +133,7 @@ export const postApi = {
 
   // 좋아요 토글
   async toggleLike(postId: number): Promise<ApiResponse<{ liked: boolean; likesCount: number }>> {
-    return apiRequest<ApiResponse<{ liked: boolean; likesCount: number }>>(`/likes/${postId}?targetType=POST`, {
+    return apiRequest<ApiResponse<{ liked: boolean; likesCount: number }>>(`/likes/${postId}/comment`, {
       method: 'POST',
     }, true)
   },

@@ -30,7 +30,7 @@ public class LikeController {
             description = "",
             security = @SecurityRequirement(name = "Authorization")
     )
-    @PostMapping("/{targetId}/post")
+    @PostMapping("/{targetId}/posts")
     public ResponseEntity<String> togglePostLike(
             @PathVariable Integer targetId
     ) {
@@ -43,7 +43,7 @@ public class LikeController {
             description = "",
             security = @SecurityRequirement(name = "Authorization")
     )
-    @PostMapping("/{targetId}/comment")
+    @PostMapping("/{targetId}/comments")
     public ResponseEntity<String> toggleCommentLike(
             @PathVariable Integer targetId
     ) {

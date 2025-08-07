@@ -29,6 +29,7 @@ CREATE TABLE posts (
                        author_id INT NOT NULL,
                        title VARCHAR(200) NOT NULL,
                        content TEXT NOT NULL,
+                       category enum('WEB', 'MOBILE', 'BACK', 'HARD', 'AI', 'NETWORK', 'SECURITY', 'DEVOPS', 'ETC') NOT NULL,
                        view_count INT DEFAULT 0,
                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

@@ -22,14 +22,13 @@ public class PostController {
             description = ""
     )
     @GetMapping
-    public ResponseEntity<PageResponse<Post>> getPosts(
+    public ResponseEntity<PageResponse<PostResponse>> getPosts(
             @RequestParam Integer boardId,
             @RequestParam(required = false) String search,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) Post.PostCategory category
     ) {
-        ;
         return ResponseEntity.ok(postService.getPosts(boardId, search, category, PageRequest.of(page, size)));
     }
 

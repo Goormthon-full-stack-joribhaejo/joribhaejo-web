@@ -27,7 +27,8 @@ public class PostService {
     private final LikeRepository likeRepository;
 
     // 게시글 목록 조회 (검색, 필터)
-    public PageResponse<Post> getPosts(Integer boardId, String search, Post.PostCategory category, Pageable pageable) {
+    @Transactional(readOnly = true)
+    public PageResponse<PostResponse> getPosts(Integer boardId, String search, Post.PostCategory category, Pageable pageable) {
         String keyword = (search == null) ? "" : search;
 
         Page<Post> page;
@@ -38,7 +39,12 @@ public class PostService {
             page = postRepository.findByBoardIdAndCategoryAndTitleContainingIgnoreCase(boardId, category, keyword, pageable);
         }
 
-        return PageResponse.fromPage(page);
+        Page<PostResponse> responsePage = page.map((post) -> {
+            Integer likeCount = likeRepository.countByTargetTypeAndTargetId(Like.TargetType.POST, post.getId());
+            return PostResponse.fromEntity(post, likeCount);
+        });
+
+        return PageResponse.fromPage(responsePage);
     }
 
     // 게시글 상세 조회 + 조회수 증가

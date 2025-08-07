@@ -29,6 +29,7 @@ enum Category {
 
 interface PostListProps {
   posts: Post[]
+  boards?: Board[]
   likedPostIds: number[]
   onPostClick: (id: number) => void
   onCreatePost: () => void
@@ -67,6 +68,7 @@ const categoryColors = {
 
 export function PostList({
   posts,
+  boards,
   likedPostIds,
   onPostClick,
   onCreatePost,
@@ -92,8 +94,8 @@ export function PostList({
   }
 
 
-  const getSectionLabel = (sectionId: number) => {
-    const board = boards?.find(b => b.id === sectionId);
+  const getBoardLabel = (boardId: number) => {
+    const board = boards?.find(b => b.id === b);
     return board ? board.name : "전체 게시판";
   }
 
@@ -129,7 +131,7 @@ export function PostList({
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-red-400 bg-clip-text text-transparent">
-                {activeBoardId ? getSectionLabel(activeBoardId) : "PC 하드웨어 커뮤니티"}
+                {activeBoardId ? getBoardLabel(activeBoardId) : "PC 하드웨어 커뮤니티"}
               </h1>
               <p className="text-gray-400 dark:text-gray-400 mt-2">
                 {activeBoardId 

@@ -69,7 +69,7 @@ export function CommentsSection({ postId }: CommentsSectionProps) {
     )
   }
 
-  const handleToggleLike = (commentId: number) => {
+  const handleToggleCommentLike = (commentId: number) => {
     toggleCommentLikeMutation.mutate(commentId, {
       onError: (error) => {
         toast({
@@ -218,7 +218,7 @@ export function CommentsSection({ postId }: CommentsSectionProps) {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => handleToggleLike(comment.id)}
+                    onClick={() => handleToggleCommentLike(comment.id)}
                     className="flex items-center space-x-1 hover:bg-gray-600 text-gray-400 hover:text-blue-400"
                   >
                     <ThumbsUp className="w-4 h-4" />

@@ -131,13 +131,6 @@ export const postApi = {
     }, true)
   },
 
-  // 댓글 좋아요 토글
-  async toggleCommentLike(commentId: number): Promise<ApiResponse<{ liked: boolean; likeCount: number }>> {
-    return apiRequest<ApiResponse<{ liked: boolean; likeCount: number }>>(`/likes/${commentId}/comments`, {
-      method: 'POST',
-    }, true)
-  },
-
   // 게시글 좋아요 토글
   async togglePostLike(postId: number): Promise<ApiResponse<{ liked: boolean; likeCount: number }>> {
     return apiRequest<ApiResponse<{ liked: boolean; likeCount: number }>>(`/likes/${postId}/posts`, {
@@ -148,6 +141,13 @@ export const postApi = {
 
 // 댓글 관련 API
 export const commentApi = {
+  // 댓글 좋아요 토글
+  async toggleCommentLike(commentId: number): Promise<ApiResponse<{ liked: boolean; likeCount: number }>> {
+    return apiRequest<ApiResponse<{ liked: boolean; likeCount: number }>>(`/likes/${commentId}/comments`, {
+      method: 'POST',
+    }, true)
+  },
+
   // 포스트의 댓글 목록 조회
   async getComments(postId: number): Promise<Comment[]> {
     return apiRequest<Comment[]>(`/posts/${postId}/comments`)

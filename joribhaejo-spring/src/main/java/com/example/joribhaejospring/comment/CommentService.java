@@ -29,7 +29,7 @@ public class CommentService {
         List<Comment> comments = commentRepository.findByPostId(postId);
 
         return comments.stream().map((comment) -> {
-            Integer likes = likeRepository.countByTargetTypeAndTargetId(Like.TargetType.COMMENT, postId);
+            Integer likes = likeRepository.countByTargetTypeAndTargetId(Like.TargetType.COMMENT, comment.getId());
             return CommentResponse.fromEntity(comment, likes);
         }).toList();
     }

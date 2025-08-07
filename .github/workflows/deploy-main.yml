@@ -38,6 +38,10 @@ jobs:
           rm -rf ./joribhaejo-spring/src/main/resources/static/*
           cp -r ./joribhaejo-next/out ./joribhaejo-spring/src/main/resources/static/ # .next/static 대신 out 디렉토리 사용 (아래 추가 설명 참조)
 
+      - name: Grant execute permission for gradlew
+        working-directory: ./joribhaejo-spring
+        run: chmod +x ./gradlew
+
       - name: Build Spring Boot JAR
         working-directory: ./joribhaejo-spring
         run: ./gradlew bootJar

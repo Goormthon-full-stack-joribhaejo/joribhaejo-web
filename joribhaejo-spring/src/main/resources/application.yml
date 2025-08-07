@@ -1,0 +1,36 @@
+spring:
+#  profiles:
+#    active: dev
+  application:
+    name: joribhaejo-spring
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        highlight_sql: true
+        use_sql_comments: true
+        format_sql: true
+  jackson:
+    time-zone: Asia/Seoul
+    deserialization:
+      fail-on-unknown-properties: true
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://jorib-mysql:3306/jorib_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: jorib_dml
+    password: password
+
+jwt:
+  secret: ef8d8dabfad0be20528ee6c61482d335b0f3370494f641ce23131c482edeae83a09cc9e078a5017d4781e74e2995dd3425e5f8d58c26b05980fed76b6058a1ad
+  refresh-token-expiration-time: 360000
+  access-token-expiration-time: 3600000
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+  override-with-generic-response: false
+  use-fqn: true

@@ -22,9 +22,7 @@ public class PostResponse {
     private Post.PostCategory category;
     private Integer viewCount;
     private Integer likeCount;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     private LocalDateTime createdAt;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     private LocalDateTime updatedAt;
 
     public static PostResponse fromEntity(Post post, Integer likeCount) {

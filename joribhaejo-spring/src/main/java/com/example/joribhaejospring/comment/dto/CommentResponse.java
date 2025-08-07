@@ -25,9 +25,7 @@ public class CommentResponse {
     private Integer parentCommentId;
     private String content;
     private Integer likeCount;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     private LocalDateTime createdAt;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     private LocalDateTime updatedAt;
 
     public static CommentResponse fromEntity(Comment comment, Integer likeCount) {

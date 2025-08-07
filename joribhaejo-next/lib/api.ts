@@ -168,6 +168,13 @@ export const commentApi = {
       method: 'DELETE',
     }, true)
   },
+
+  // 댓글 좋아요 토글
+  async toggleCommentLike(commentId: number): Promise<string> {
+    return apiRequest<string>(`/comments/${commentId}/like`, {
+      method: 'POST',
+    }, true)
+  },
 }
 
 // 사용자 관련 API

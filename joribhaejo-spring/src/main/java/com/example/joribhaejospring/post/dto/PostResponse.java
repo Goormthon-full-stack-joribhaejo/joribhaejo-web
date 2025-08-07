@@ -2,6 +2,7 @@ package com.example.joribhaejospring.post.dto;
 
 import com.example.joribhaejospring.post.Post;
 import com.example.joribhaejospring.user.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +22,9 @@ public class PostResponse {
     private Post.PostCategory category;
     private Integer viewCount;
     private Integer likeCount;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     private LocalDateTime createdAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     private LocalDateTime updatedAt;
 
     public static PostResponse fromEntity(Post post, Integer likeCount) {

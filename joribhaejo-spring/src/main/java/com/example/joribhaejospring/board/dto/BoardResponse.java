@@ -1,6 +1,7 @@
 package com.example.joribhaejospring.board.dto;
 
 import com.example.joribhaejospring.board.Board;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +17,9 @@ public class BoardResponse {
     private Integer id;
     private String name;
     private String description;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     private LocalDateTime createdAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     private LocalDateTime updatedAt;
 
     public static BoardResponse fromEntity(Board board) {

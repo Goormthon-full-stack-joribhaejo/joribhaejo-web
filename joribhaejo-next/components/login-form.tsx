@@ -10,7 +10,11 @@ import { useToast } from "@/components/ui/use-toast" // Assuming useToast is ava
 import { authApi, userApi } from "@/lib/api"
 import { ApiError } from "@/lib/api" // ApiError 임포트 추가
 
-export function LoginForm() {
+interface LoginFormProps {
+  onLoginSuccess?: () => void;
+}
+
+export function LoginForm({ onLoginSuccess }: LoginFormProps) {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
@@ -36,7 +40,7 @@ export function LoginForm() {
         title: "로그인 성공",
         description: "환영합니다!",
       })
-      router.push("/") // 로그인 성공 후 리다이렉트할 경로
+      onLoginSuccess?.()
 
     } catch (error: any) {
       if (error instanceof ApiError) {

@@ -32,17 +32,16 @@ import {
   TrendingUp,
   ImageIcon
 } from "lucide-react"
-import type { User as UserType } from "@/lib/types" // UserType으로 임포트
-
-type UserRole = "guest" | "member"
+import { useCurrentUser } from "@/hooks/use-auth";
+import { useQueryClient } from '@tanstack/react-query';
+import type { User as UserType } from "@/lib/types";
 
 interface TopNavigationProps {
-  userRole: UserRole
-  setUserRole: (role: UserRole) => void
   activeSection: number
   setActiveSection: (section: number) => void
   searchQuery?: string
   onSearchChange?: (query: string) => void
+  onLoginClick?: () => void
 }
 
 const iconMap: { [key: string]: React.ElementType } = {
@@ -53,41 +52,27 @@ const iconMap: { [key: string]: React.ElementType } = {
   "IT 뉴스": ImageIcon,
 };
 
-export function TopNavigation({ 
-  userRole, 
-  setUserRole, 
-  activeSection, 
+export function TopNavigation({
+  activeSection,
   setActiveSection,
   searchQuery = "",
-  onSearchChange
+  onSearchChange,
+  onLoginClick
 }: TopNavigationProps) {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const { data: boards } = useBoards();
   const router = useRouter();
-  const [currentUser, setCurrentUser] = useState<UserType | null>(null); // currentUser 상태 추가
-  const [navigationItems, setNavigationItems] = useState<any[]>([]); // navigationItems 상태 추가
+  const { data: currentUser, isLoading: isUserLoading } = useCurrentUser();
+  const [navigationItems, setNavigationItems] = useState<any[]>([]);
+  const queryClient = useQueryClient();
+
+  // userRole을 currentUser의 존재 여부에 따라 직접 정의
+  const userRole = currentUser ? "member" : "guest";
 
   useEffect(() => {
     setMounted(true)
-    // localStorage에서 사용자 정보 로드
-    const storedUser = localStorage.getItem("currentUser")
-    if (storedUser) {
-      try {
-        const user = JSON.parse(storedUser) as UserType;
-        setCurrentUser(user);
-        setUserRole("member"); // 로그인 상태로 설정
-      } catch (e) {
-        console.error("Failed to parse user data from localStorage", e);
-        // 파싱 실패 시 guest로 초기화
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("currentUser");
-        setUserRole("guest");
-      }
-    } else {
-      setUserRole("guest");
-    }
-  }, [setUserRole]);
+  }, []);
 
   useEffect(() => {
     if (boards) {
@@ -107,14 +92,12 @@ export function TopNavigation({
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("currentUser");
-    setCurrentUser(null);
-    setUserRole("guest");
-    router.push("/login"); // 로그아웃 후 로그인 페이지로 이동
+    queryClient.invalidateQueries({ queryKey: ['currentUser'] });
   };
 
   const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark")
-  }
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-900/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 dark:border-gray-800">
@@ -182,12 +165,12 @@ export function TopNavigation({
               <Search className="w-4 h-4" />
             </Button>
 
-            {userRole === "guest" ? (
+            {mounted && (userRole === "guest" ? (
               <div className="flex items-center gap-2">
                 <Button
-                  onClick={() => router.push("/login")}
                   variant="outline"
                   size="sm"
+                  onClick={onLoginClick}
                   className="border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white bg-transparent"
                 >
                   <LogIn className="w-4 h-4 mr-1" />
@@ -242,7 +225,7 @@ export function TopNavigation({
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-            )}
+            ))}
           </div>
         </div>
       </div>

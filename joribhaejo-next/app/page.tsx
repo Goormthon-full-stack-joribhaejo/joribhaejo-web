@@ -9,6 +9,8 @@ import { TopNavigation } from "@/components/top-navigation"
 import { usePosts, useCreatePost, useUpdatePost, useDeletePost, useToggleLike, useIncrementViews, usePost } from '@/hooks/use-posts'
 import { useBoards } from '@/hooks/use-boards'
 import { Post, UserRole, Category } from '@/lib/types'
+import { LoginForm } from "@/components/login-form"
+import { useCurrentUser } from "@/hooks/use-auth"
 
 export default function Home() {
   const queryClient = useQueryClient()
@@ -17,14 +19,19 @@ export default function Home() {
   const [showCreatePost, setShowCreatePost] = useState(false)
   const [showEditPost, setShowEditPost] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [showLogin, setShowLogin] = useState(false)
   const [likedPosts, setLikedPosts] = useState<Set<number>>(new Set())
   const [pinnedPosts, setPinnedPosts] = useState<Set<number>>(new Set())
   
   // TopNavigation 상태
-  const [userRole, setUserRole] = useState<UserRole>("guest")
   const [activeSection, setActiveSection] = useState<number>(1)
   const [selectedCategory, setSelectedCategory] = useState<Category | "ALL">("ALL")
   const [searchQuery, setSearchQuery] = useState("")
+
+  // 현재 사용자 정보 (로그인 여부 판단)
+  const { data: currentUser, isLoading: isUserLoading } = useCurrentUser()
+
+  const userRole = currentUser ? "member" : "guest";
 
   // 데이터 페칭
   const { data: boards, isLoading: boardsLoading, isError: boardsError } = useBoards();
@@ -139,14 +146,16 @@ export default function Home() {
   const { data: singlePostResponse, isLoading: singlePostLoading, isError: singlePostError } = usePost(selectedPostId || 0);
   const singlePost = selectedPostId ? singlePostResponse : undefined;
 
-  
+  // 사용자 정보 로딩 중일 때 로딩 스피너 표시
+  if (isUserLoading) {
+    return <div>사용자 정보 로딩 중...</div>;
+  }
 
   if (showCreatePost) {
     return <CreatePost 
       onSubmit={handleCreatePost} 
       onCancel={() => setShowCreatePost(false)}
       userRole={userRole}
-      setUserRole={setUserRole}
       activeSection={activeSection}
       setActiveSection={setActiveSection}
       searchQuery={searchQuery}
@@ -170,7 +179,6 @@ export default function Home() {
         }}
         isEdit={true}
         userRole={userRole}
-        setUserRole={setUserRole}
         activeSection={activeSection}
         setActiveSection={setActiveSection}
         searchQuery={searchQuery}
@@ -197,7 +205,6 @@ export default function Home() {
           onPin={() => handlePin(singlePost.id)}
           onUnpin={() => handleUnpin(singlePost.id)}
           userRole={userRole}
-          setUserRole={setUserRole}
           activeSection={activeSection}
           setActiveSection={setActiveSection}
           searchQuery={searchQuery}
@@ -221,13 +228,13 @@ export default function Home() {
   return (
     <>
       <TopNavigation 
-        userRole={userRole} 
-        setUserRole={setUserRole} 
         activeSection={activeSection} 
         setActiveSection={setActiveSection}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
+        onLoginClick={() => setShowLogin(true)}
       />
+      {showLogin && <LoginForm onLoginSuccess={() => setShowLogin(false)} />}
       <PostList 
         posts={posts} 
         boards={boards}
@@ -256,5 +263,3 @@ export default function Home() {
     </>
   );
 }
-      
-      

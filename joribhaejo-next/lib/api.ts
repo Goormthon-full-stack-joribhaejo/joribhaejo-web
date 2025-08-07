@@ -135,6 +135,7 @@ export const postApi = {
   async toggleLike(postId: number): Promise<ApiResponse<{ liked: boolean; likesCount: number }>> {
     return apiRequest<ApiResponse<{ liked: boolean; likesCount: number }>>(`/posts/${postId}/like`, {
       method: 'POST',
+      body: JSON.stringify({ postId }),
     }, true)
   },
 }
@@ -171,7 +172,7 @@ export const commentApi = {
 
   // 댓글 좋아요 토글
   async toggleCommentLike(commentId: number): Promise<string> {
-    return apiRequest<string>(`/comments/${commentId}/like`, {
+    return apiRequest<string>(`/likes/${commentId}`, {
       method: 'POST',
     }, true)
   },

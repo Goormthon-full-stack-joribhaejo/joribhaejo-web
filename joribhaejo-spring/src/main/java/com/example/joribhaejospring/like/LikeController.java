@@ -16,10 +16,10 @@ public class LikeController {
             summary = "좋아요 상태 조회",
             description = ""
     )
-    @GetMapping
+    @GetMapping("/{targetId}")
     public ResponseEntity<Boolean> checkLike(
             @RequestParam Like.TargetType targetType,
-            @RequestParam Integer targetId
+            @PathVariable Integer targetId
     ) {
         boolean liked = likeService.isLiked(targetType, targetId);
         return ResponseEntity.ok(liked);
@@ -30,10 +30,10 @@ public class LikeController {
             description = "",
             security = @SecurityRequirement(name = "Authorization")
     )
-    @PostMapping
+    @PostMapping("/{targetId}")
     public ResponseEntity<String> toggleLike(
             @RequestParam Like.TargetType targetType,
-            @RequestParam Integer targetId
+            @PathVariable Integer targetId
     ) {
         likeService.toggleLike(targetType, targetId);
         return ResponseEntity.ok("좋아요 토글");

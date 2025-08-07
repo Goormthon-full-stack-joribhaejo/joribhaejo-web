@@ -39,7 +39,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/posts/*", "/api/posts", "/api/posts/*/comments").permitAll()
                                 .requestMatchers("/api/likes", "/api/boards", "/api/boards/**").permitAll()
                                 .requestMatchers("/", "/login", "/signup", "/index.html").permitAll()
-                                .requestMatchers("/static/**", "/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
+                                .requestMatchers("/_next/**", "/favicon.ico").permitAll()
                                 .anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
 
                         //.anyRequest().permitAll() // 모든 요청 허용

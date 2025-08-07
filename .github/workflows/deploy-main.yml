@@ -6,6 +6,7 @@ on:
 
 env:
   IMAGE_NAME: ${{ secrets.IMAGE_NAME }}
+
 jobs:
   build-deploy-main:
     runs-on: ubuntu-latest
@@ -33,8 +34,10 @@ jobs:
 
       - name: Copy Next.js build files to Spring Boot static resources
         run: |
-          rm -rf ./joribhaejo-spring/src/main/resources/static/*
-          cp -r ./joribhaejo-next/.next/static ./joribhaejo-spring/src/main/resources/static/
+          rm -rf ./joribhaejo-spring/src/main/resources/static
+          mkdir -p ./joribhaejo-spring/src/main/resources/static
+          cp -r ./joribhaejo-next/.next ./joribhaejo-spring/src/main/resources/static/.next
+          cp -r ./joribhaejo-next/public ./joribhaejo-spring/src/main/resources/static/public
 
       - name: Build Spring Boot JAR
         working-directory: ./joribhaejo-spring

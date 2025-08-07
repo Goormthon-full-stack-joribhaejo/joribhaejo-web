@@ -34,7 +34,7 @@ public class CommentResponse {
                 .postId(comment.getPost().getId())
                 .authorId(comment.getAuthor().getId())
                 .likeCount(likeCount)
-                .parentCommentId(comment.getParentComment().getId())
+                .parentCommentId(comment.getParentComment() != null ? comment.getParentComment().getId() : null)
                 .content(comment.getContent())
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())

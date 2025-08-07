@@ -156,6 +156,10 @@ export default function Home() {
           onSuccess: () => {
             console.log("updatePostMutation onSuccess triggered!");
             setShowEditPost(false);
+            queryClient.invalidateQueries({ queryKey: ["posts"] });
+            if (selectedPostId) {
+              queryClient.invalidateQueries({ queryKey: ["post", selectedPostId] });
+            }
           },
           onError: (error) => {
             console.error("updatePostMutation onError triggered:", error);

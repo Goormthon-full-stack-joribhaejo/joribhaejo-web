@@ -329,11 +329,17 @@ export default function Home() {
         setActiveBoardId={setActiveBoardId}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
-        onLoginClick={() => setShowLogin(true)}
+        onLoginClick={() => {
+          setShowLogin(!showLogin);
+          setShowSignup(false);
+        }}
         onLogoutSuccess={() => {
           /* 로그아웃 후 로직, 예: setShowLogin(true) */
         }}
-        onSignupClick={() => setShowSignup(true)}
+        onSignupClick={() => {
+          setShowSignup(!showSignup);
+          setShowLogin(false);
+        }}
         onMessageClick={() => setShowMessage(true)}
       />
 

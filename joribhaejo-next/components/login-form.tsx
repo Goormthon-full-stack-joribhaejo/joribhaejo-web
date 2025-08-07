@@ -15,7 +15,7 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ onLoginSuccess }: LoginFormProps) {
-  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState("") // 에러 메시지 상태 추가
@@ -28,7 +28,7 @@ export function LoginForm({ onLoginSuccess }: LoginFormProps) {
     setErrorMessage("") // 로그인 시도 시 에러 메시지 초기화
 
     try {
-      const data = await authApi.login({ username, password })
+      const data = await authApi.login({ email, password })
       console.log("Attempting to set accessToken:", data.accessToken); // 이 줄 추가
       localStorage.setItem("accessToken", data.accessToken)
 
@@ -64,13 +64,13 @@ export function LoginForm({ onLoginSuccess }: LoginFormProps) {
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <Label htmlFor="username">사용자 이름</Label>
+              <Label htmlFor="email">이메일 또는 계정</Label>
               <Input
-                id="username"
+                id="email"
                 type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="사용자 이름을 입력하세요"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="이메일 또는 계정을 입력하세요"
                 className="bg-gray-700 dark:bg-gray-700 border-gray-600 dark:border-gray-600 text-gray-100 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400"
                 required
               />

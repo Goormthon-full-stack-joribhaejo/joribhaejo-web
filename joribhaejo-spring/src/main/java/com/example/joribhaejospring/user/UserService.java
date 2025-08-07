@@ -39,11 +39,11 @@ public class UserService {
     }
 
     public LoginResponse login(LoginRequest request) {
-        User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new BadCredentialsException("Invalid username"));
+        User user = userRepository.findByUsername(request.getEmail())
+                .orElseThrow(() -> new BadCredentialsException("Invalid email"));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new BadCredentialsException("Invalid username or password");
+            throw new BadCredentialsException("Invalid email or password");
         }
 
         Authentication auth = new UsernamePasswordAuthenticationToken(

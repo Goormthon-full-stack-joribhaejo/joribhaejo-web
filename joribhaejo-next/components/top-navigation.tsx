@@ -44,6 +44,8 @@ interface TopNavigationProps {
   onSearchChange?: (query: string) => void
   onLoginClick?: () => void
   onLogoutSuccess?: () => void
+  onSignupClick?: () => void
+  onMessageClick?: () => void
 }
 
 const iconMap: { [key: string]: React.ElementType } = {
@@ -59,7 +61,9 @@ export function TopNavigation({
   setActiveBoardId,
   searchQuery = "",
   onSearchChange,
-  onLoginClick
+  onLoginClick,
+  onSignupClick,
+  onMessageClick
 }: TopNavigationProps) {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
@@ -182,7 +186,7 @@ export function TopNavigation({
                   로그인
                 </Button>
                 <Button
-                  onClick={() => router.push("/register")}
+                  onClick={onSignupClick}
                   size="sm"
                   className="bg-gradient-to-r from-blue-600 to-red-600 hover:from-blue-700 hover:to-red-700"
                 >
@@ -193,6 +197,12 @@ export function TopNavigation({
             ) : (
               <div className="flex items-center gap-3">
                 
+                {/* Message button */}
+                <Button variant="ghost" size="sm" 
+                  onClick={onMessageClick}
+                  className="text-gray-400 dark:text-gray-400 hover:text-blue-400 dark:hover:text-blue-400">
+                  <MessageSquare className="w-4 h-4" />
+                </Button>
 
                 {/* Profile Dropdown */}
                 <DropdownMenu>
@@ -212,12 +222,10 @@ export function TopNavigation({
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56 bg-gray-800 dark:bg-gray-800 border-gray-700 dark:border-gray-700">
-                    <DropdownMenuItem className="text-gray-100 dark:text-gray-100 hover:bg-gray-700 dark:hover:bg-gray-700">
+                    <DropdownMenuItem 
+                      onClick={() => toast({ title: "프로필 기능은 아직 구현되지 않았습니다.", variant: "default" })}
+                      className="text-gray-100 dark:text-gray-100 hover:bg-gray-700 dark:hover:bg-gray-700">
                       <User className="w-4 h-4 mr-2" />내 프로필
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="text-gray-100 dark:text-gray-100 hover:bg-gray-700 dark:hover:bg-gray-700">
-                      <Settings className="w-4 h-4 mr-2" />
-                      설정
                     </DropdownMenuItem>
                     <DropdownMenuSeparator className="bg-gray-700 dark:bg-gray-700" />
                     <DropdownMenuItem

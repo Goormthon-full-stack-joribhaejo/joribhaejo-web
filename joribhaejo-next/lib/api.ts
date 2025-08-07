@@ -1,4 +1,4 @@
-import { Post, Comment, User, ApiResponse, PaginatedResponse, PostFilters, Board, PostCreateRequest } from './types'
+import { Post, Message, Comment, User, ApiResponse, PaginatedResponse, PostFilters, Board, PostCreateRequest } from './types'
 
 // API 기본 설정
 const API_BASE_URL = 'http://jorib.mobidic.shop/api'
@@ -177,6 +177,39 @@ export const commentApi = {
   },
 }
 
+
+// 쪽지 관련 API
+export const messageApi = {
+  // 받은 쪽지 목록 조회
+  async getInboxMessages(): Promise<Message[]> {
+    return apiRequest<Message[]>('/messages/inbox', {
+      method: 'GET',
+    }, true)
+  },
+  
+  // 보낸 쪽지 목록 조회
+  async getSentMessages(): Promise<Message[]> {
+    return apiRequest<Message[]>('/messages/sent', {
+      method: 'GET',
+    }, true)
+  },
+
+  // 쪽지 보내기
+  async sendMessage(receiverUsername: string, content: string): Promise<Message> {
+    return apiRequest<Message>(`/messages/${receiverUsername}`, {
+      method: 'POST',
+      body: JSON.stringify({ content }),
+    }, true)
+  },
+
+  // 쪽지 삭제
+  async deleteMessage(messageId: number): Promise<void> {
+    return apiRequest<void>(`/messages/${messageId}`, {
+      method: 'DELETE',
+    }, true)
+  }
+}
+
 // 사용자 관련 API
 export const userApi = {
   // 현재 사용자 정보 조회
@@ -212,7 +245,7 @@ export const authApi = {
 
   // 회원가입
   async register(userData: { username: string; email: string; password: string }): Promise<ApiResponse<{ token: string; user: User }>> {
-    return apiRequest<ApiResponse<{ token: string; user: User }>>('/auth/register', {
+    return apiRequest<ApiResponse<{ token: string; user: User }>>('/users/signup', {
       method: 'POST',
       body: JSON.stringify(userData),
     })

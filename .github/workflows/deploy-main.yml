@@ -29,6 +29,19 @@ jobs:
         working-directory: ./joribhaejo-next
         run: pnpm install
 
+      # ================================================================
+      # ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ 이 디버깅 스텝을 추가해주세요 ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+      - name: 🧐 Verify files in runner
+        working-directory: ./joribhaejo-next
+        run: |
+          echo "--- Listing all files recursively from current directory (joribhaejo-next) ---"
+          ls -R
+
+          echo "\n--- Content of tsconfig.json ---"
+          cat tsconfig.json
+      # ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ 여기까지 추가 ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+      # ================================================================
+
       - name: Build Next.js
         working-directory: ./joribhaejo-next
         run: pnpm build

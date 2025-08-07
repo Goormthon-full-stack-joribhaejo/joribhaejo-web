@@ -147,10 +147,10 @@ export const commentApi = {
   },
 
   // 댓글 생성
-  async createComment(postId: number, content: string): Promise<string> {
+  async createComment(postId: number, content: string, parentCommentId?: number): Promise<string> {
     return apiRequest<string>(`/comments/${postId}`, {
       method: 'POST',
-      body: JSON.stringify({ content }),
+      body: JSON.stringify({ content, parentCommentId }),
     }, true)
   },
 

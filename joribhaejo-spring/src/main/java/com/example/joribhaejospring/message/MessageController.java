@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MessageController {
     private final MessageService messageService;
-    
+
     @Operation(
             summary = "받은 쪽지 목록 조회",
             description = "",
@@ -49,17 +49,20 @@ public class MessageController {
             description = "",
             security = @SecurityRequirement(name = "Authorization")
     )
-    @PostMapping("/{receiverId}")
-    public ResponseEntity<MessageDto> sendMessage(@PathVariable Integer receiverId,
-                                  @RequestBody MessageRequest request) {
-        return ResponseEntity.ok(messageService.sendMessage(receiverId, request.getContent()));
+    @PostMapping("/{receiverUsername}")
+    public ResponseEntity<MessageDto> sendMessage(
+            @PathVariable String receiverUsername,
+            @RequestBody MessageRequest request
+    ) {
+        return ResponseEntity.ok(messageService.sendMessage(receiverUsername, request.getContent()));
     }
 
     @Operation(
             summary = "쪽지 삭제",
             description = "",
             security = @SecurityRequirement(name = "Authorization")
-    )    @DeleteMapping("/{messageId}")
+    )
+    @DeleteMapping("/{messageId}")
     public ResponseEntity<String> deleteMessage(@PathVariable Integer messageId) {
         messageService.deleteMessage(messageId);
         return ResponseEntity.ok("쪽지 삭제 성공");

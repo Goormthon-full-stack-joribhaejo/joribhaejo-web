@@ -35,9 +35,9 @@ public class MessageService {
         return MessageDto.fromEntity(message);
     }
 
-    public MessageDto sendMessage(Integer receiverId, String content) {
+    public MessageDto sendMessage(String receiverUsername, String content) {
         User sender = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User receiver = userRepository.findById(receiverId)
+        User receiver = userRepository.findByUsername(receiverUsername)
                 .orElseThrow(() -> new NoSuchElementException("Receiver not found"));
 
         Message message = Message.builder()

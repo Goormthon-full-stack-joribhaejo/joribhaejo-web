@@ -26,16 +26,28 @@ public class LikeController {
     }
 
     @Operation(
-            summary = "좋아요 토글",
+            summary = "게시글 좋아요 토글",
             description = "",
             security = @SecurityRequirement(name = "Authorization")
     )
-    @PostMapping("/{targetId}")
-    public ResponseEntity<String> toggleLike(
-            @RequestParam Like.TargetType targetType,
+    @PostMapping("/{targetId}/post")
+    public ResponseEntity<String> togglePostLike(
             @PathVariable Integer targetId
     ) {
-        likeService.toggleLike(targetType, targetId);
+        likeService.toggleLike(Like.TargetType.POST, targetId);
+        return ResponseEntity.ok("좋아요 토글");
+    }
+
+    @Operation(
+            summary = "댓글 좋아요 토글",
+            description = "",
+            security = @SecurityRequirement(name = "Authorization")
+    )
+    @PostMapping("/{targetId}/comment")
+    public ResponseEntity<String> toggleCommentLike(
+            @PathVariable Integer targetId
+    ) {
+        likeService.toggleLike(Like.TargetType.COMMENT, targetId);
         return ResponseEntity.ok("좋아요 토글");
     }
 }

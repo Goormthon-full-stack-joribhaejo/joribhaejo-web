@@ -24,6 +24,7 @@ export interface Post {
   title: string
   content: string
   author: string
+  authorId: number
   category: Category
   likeCount: number
   comments: number

@@ -55,7 +55,9 @@ export function PostDetail({
     })
   }
 
-  const isEdited = post.createdAt !== post.updatedAt
+  const { data: currentUser, isLoading: isUserLoading } = useCurrentUser();
+  const isEdited = post.createdAt !== post.updatedAt;
+  const canEdit = userRole === "member" && post.authorId === currentUser?.id;
 
   return (
     <div className="min-h-screen bg-gray-900 dark:bg-gray-900 text-gray-100 dark:text-gray-100">
@@ -110,7 +112,7 @@ export function PostDetail({
                 </div>
 
                 {/* Edit/Delete Menu */}
-                {(onEdit || onDelete) && (
+                {((onEdit || onDelete) && canEdit) && (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="sm" className="text-gray-400 dark:text-gray-400 hover:text-gray-200 dark:hover:text-gray-200">
@@ -186,12 +188,12 @@ export function PostDetail({
                       e.preventDefault()
                     }}
                     className={`gap-3 transition-colors ${
-                      post.isLiked
+                      likedPostIds.includes(post.id)
                         ? "text-red-400 hover:text-red-300"
                         : "text-gray-400 dark:text-gray-400 hover:text-red-400"
                     }`}
                   >
-                    <Heart className={`w-6 h-6 ${post.isLiked ? "fill-current" : ""}`} />
+                    <Heart className={`w-6 h-6 ${likedPostIds.includes(post.id) ? "fill-current" : ""}`} />
                     <span className="font-medium text-lg">{post.likeCount}</span>
                   </Button>
 

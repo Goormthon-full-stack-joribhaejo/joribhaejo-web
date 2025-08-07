@@ -225,12 +225,12 @@ export function PostList({
                           onLike?.(post.id)
                         }}
                         className={`gap-2 transition-colors ${
-                          post.isLiked
+                          likedPostIds.includes(post.id)
                             ? "text-red-400 hover:text-red-300"
                             : "text-gray-400 dark:text-gray-400 hover:text-red-400"
                         }`}
                       >
-                        <Heart className={`w-4 h-4 ${post.isLiked ? "fill-current" : ""}`} />
+                        <Heart className={`w-4 h-4 ${likedPostIds.includes(post.id) ? "fill-current" : ""}`} />
                         <span className="text-sm font-medium">{post.likeCount}</span>
                       </Button>
 
@@ -238,65 +238,6 @@ export function PostList({
                         <Eye className="w-4 h-4" />
                         <span className="text-sm font-medium">{(post.viewCount || 0).toLocaleString()}</span>
                       </div>
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="flex items-center gap-2">
-                      {/* Share Button */}
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleShare(post)
-                        }}
-                        className="text-gray-400 dark:text-gray-400 hover:text-blue-400"
-                      >
-                        <Share2 className="w-4 h-4" />
-                      </Button>
-
-                      {/* Edit/Delete Menu */}
-                      {(onEdit || onDelete) && (
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button 
-                              variant="ghost" 
-                              size="sm" 
-                              className="text-gray-400 dark:text-gray-400 hover:text-gray-200 dark:hover:text-gray-200"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <MoreHorizontal className="w-4 h-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="w-48 bg-gray-800 dark:bg-gray-800 border-gray-700 dark:border-gray-700">
-                            {onEdit && (
-                              <DropdownMenuItem 
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  onEdit(post.id)
-                                }} 
-                                className="text-gray-100 dark:text-gray-100 hover:bg-gray-700 dark:hover:bg-gray-700"
-                              >
-                                <Edit className="w-4 h-4 mr-2" />
-                                수정
-                              </DropdownMenuItem>
-                            )}
-                            {onEdit && onDelete && <DropdownMenuSeparator className="bg-gray-700 dark:bg-gray-700" />}
-                            {onDelete && (
-                              <DropdownMenuItem 
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  onDelete(post.id)
-                                }} 
-                                className="text-red-400 dark:text-red-400 hover:bg-gray-700 dark:hover:bg-gray-700"
-                              >
-                                <Trash2 className="w-4 h-4 mr-2" />
-                                삭제
-                              </DropdownMenuItem>
-                            )}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      )}
                     </div>
                   </div>
                 </div>

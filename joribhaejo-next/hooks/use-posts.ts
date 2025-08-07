@@ -12,7 +12,10 @@ export function usePosts(filters: {
 }) {
   return useQuery({
     queryKey: ['posts', filters.boardId, filters.search, filters.page, filters.size, filters.category],
-    queryFn: () => postApi.getPosts(filters),
+    queryFn: () => {
+      console.log('Refetching posts with filters:', filters);
+      return postApi.getPosts(filters);
+    },
     staleTime: 5 * 60 * 1000, // 5분
     gcTime: 10 * 60 * 1000, // 10분
     enabled: !!filters.boardId, // boardId가 있을 때만 쿼리를 실행합니다.
@@ -24,7 +27,7 @@ export function usePost(postId: number) {
   return useQuery({
     queryKey: ['post', postId],
     queryFn: () => {
-      console.log('Fetching single post with ID:', postId);
+      console.log('Refetching single post with ID:', postId);
       return postApi.getPost(postId);
     },
     enabled: !!postId,
@@ -55,15 +58,6 @@ export function useUpdatePost() {
         onSuccess: (data, postId) => {
       queryClient.invalidateQueries({ queryKey: ['post', postId] });
       queryClient.invalidateQueries({ queryKey: ['posts'] });
-
-      // likedPostIds 캐시 업데이트
-      queryClient.setQueryData(['likedPostIds'], (old: number[] | undefined) => {
-        if (data.data.liked) {
-          return [...(old || []), postId];
-        } else {
-          return (old || []).filter((id) => id !== postId);
-        }
-      });
     },
   })
 }
@@ -86,35 +80,24 @@ export function useTogglePostLike() {
   const queryClient = useQueryClient()
   
   return useMutation({
-    mutationFn: postApi.togglePostLike,
+    mutationFn: (postId: number) => {
+      console.log('Calling togglePostLike API for postId:', postId);
+      return postApi.togglePostLike(postId);
+    },
     onSuccess: (data, postId) => {
-      // 포스트 상세 정보 업데이트
-      queryClient.setQueryData(['post', postId], (old: any) => {
-        if (old?.data) {
-          return {
-            ...old,
-            data: {
-              ...old.data,
-              likeCount: data.data.likeCount,
-              isLiked: data.data.liked, // isLiked 상태 업데이트
-            },
-          }
-        }
-        return old
-      })
-
-      // 포스트 목록에서도 업데이트
-      queryClient.setQueriesData({ queryKey: ['posts'] }, (old: any) => {
-        if (old?.content) {
-          return {
-            ...old,
-            content: old.content.map((post: Post) =>
-              post.id === postId ? { ...post, likeCount: data.data.likeCount, isLiked: data.data.liked } : post
-            ),
-          }
-        }
-        return old
-      })
+      console.log('togglePostLike onSuccess triggered for postId:', postId, 'data:', data);
+      queryClient.invalidateQueries({ queryKey: ['post', postId] });
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+      queryClient.invalidateQueries({ queryKey: ['likedPostIds'] });
+    },
+    onError: (error, postId) => {
+      console.error('togglePostLike onError triggered for postId:', postId, 'error:', error);
+      // Optionally show a toast or error message to the user
+      // toast({
+      //   title: "좋아요 처리 실패",
+      //   description: "좋아요 처리 중 오류가 발생했습니다.",
+      //   variant: "destructive",
+      // });
     },
   })
 }

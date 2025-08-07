@@ -15,14 +15,14 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v3
 
+      - name: Install pnpm
+        run: npm install -g pnpm
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: 'pnpm'
-
-      - name: Install pnpm
-        run: npm install -g pnpm
 
       - name: Install dependencies (Next.js)
         working-directory: ./joribhaejo-next
@@ -34,10 +34,8 @@ jobs:
 
       - name: Copy Next.js build files to Spring Boot static resources
         run: |
-          rm -rf ./joribhaejo-spring/src/main/resources/static
-          mkdir -p ./joribhaejo-spring/src/main/resources/static
-          cp -r ./joribhaejo-next/.next ./joribhaejo-spring/src/main/resources/static/.next
-          cp -r ./joribhaejo-next/public ./joribhaejo-spring/src/main/resources/static/public
+          rm -rf ./joribhaejo-spring/src/main/resources/static/*
+          cp -r ./joribhaejo-next/.next/static ./joribhaejo-spring/src/main/resources/static/
 
       - name: Build Spring Boot JAR
         working-directory: ./joribhaejo-spring

@@ -131,9 +131,16 @@ export const postApi = {
     }, true)
   },
 
-  // 좋아요 토글
-  async toggleLike(postId: number): Promise<ApiResponse<{ liked: boolean; likesCount: number }>> {
-    return apiRequest<ApiResponse<{ liked: boolean; likesCount: number }>>(`/likes/${postId}/comment`, {
+  // 댓글 좋아요 토글
+  async toggleCommentLike(commentId: number): Promise<ApiResponse<{ liked: boolean; likeCount: number }>> {
+    return apiRequest<ApiResponse<{ liked: boolean; likeCount: number }>>(`/likes/${commentId}/comments`, {
+      method: 'POST',
+    }, true)
+  },
+
+  // 게시글 좋아요 토글
+  async togglePostLike(postId: number): Promise<ApiResponse<{ liked: boolean; likeCount: number }>> {
+    return apiRequest<ApiResponse<{ liked: boolean; likeCount: number }>>(`/likes/${postId}/posts`, {
       method: 'POST',
     }, true)
   },
@@ -168,13 +175,6 @@ export const commentApi = {
       method: 'DELETE',
     }, true)
   },
-
-  // 댓글 좋아요 토글
-  async toggleCommentLike(commentId: number): Promise<string> {
-    return apiRequest<string>(`/likes/${commentId}`, {
-      method: 'POST',
-    }, true)
-  },
 }
 
 // 사용자 관련 API
@@ -192,6 +192,11 @@ export const userApi = {
   // 사용자 포스트 목록 조회
   async getUserPosts(userId: number, page: number = 1): Promise<PaginatedResponse<Post>> {
     return apiRequest<PaginatedResponse<Post>>(`/users/${userId}/posts?page=${page}`, {}, true) // 인증 필요
+  },
+
+  // 사용자가 좋아요 누른 게시글 ID 목록 조회
+  async getLikedPostIds(): Promise<number[]> {
+    return apiRequest<number[]>('/users/me/liked-post-ids', {}, true); // 인증 필요
   },
 }
 

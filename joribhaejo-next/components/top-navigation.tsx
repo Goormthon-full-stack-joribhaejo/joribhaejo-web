@@ -34,14 +34,16 @@ import {
 } from "lucide-react"
 import { useCurrentUser } from "@/hooks/use-auth";
 import { useQueryClient } from '@tanstack/react-query';
+import { toast } from "@/hooks/use-toast";
 import type { User as UserType } from "@/lib/types";
 
 interface TopNavigationProps {
-  activeSection: number
-  setActiveSection: (section: number) => void
+  activeBoardId: number
+  setActiveBoardId: (boardId: number) => void
   searchQuery?: string
   onSearchChange?: (query: string) => void
   onLoginClick?: () => void
+  onLogoutSuccess?: () => void
 }
 
 const iconMap: { [key: string]: React.ElementType } = {
@@ -53,8 +55,8 @@ const iconMap: { [key: string]: React.ElementType } = {
 };
 
 export function TopNavigation({
-  activeSection,
-  setActiveSection,
+  activeBoardId,
+  setActiveBoardId,
   searchQuery = "",
   onSearchChange,
   onLoginClick
@@ -93,6 +95,9 @@ export function TopNavigation({
     localStorage.removeItem("accessToken");
     localStorage.removeItem("currentUser");
     queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+    queryClient.removeQueries({ queryKey: ['currentUser'] });
+    toast({ title: "로그아웃 되었습니다.", variant: "default" });
+    router.push("/");
   };
 
   const toggleTheme = () => {
@@ -121,9 +126,9 @@ export function TopNavigation({
                   key={item.id}
                   variant="ghost"
                   size="sm"
-                  onClick={() => setActiveSection(item.id)}
+                  onClick={() => setActiveBoardId(item.id)}
                   className={`flex items-center gap-2 px-3 py-2 rounded-lg ${
-                    activeSection === item.id
+                    activeBoardId === item.id
                       ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
                       : "text-gray-300 dark:text-gray-300 hover:text-blue-400 dark:hover:text-blue-400"
                   }`}
@@ -238,9 +243,9 @@ export function TopNavigation({
               key={item.id}
               variant="ghost"
               size="sm"
-              onClick={() => setActiveSection(item.id)}
+              onClick={() => setActiveBoardId(item.id)}
               className={`flex items-center gap-2 px-3 py-2 rounded-lg whitespace-nowrap ${
-                activeSection === item.id
+                    activeBoardId === item.id
                   ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
                   : "text-gray-300 dark:text-gray-300 hover:text-blue-400 dark:hover:text-blue-400"
               }`}

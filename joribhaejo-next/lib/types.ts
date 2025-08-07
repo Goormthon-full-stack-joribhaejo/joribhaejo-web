@@ -10,8 +10,6 @@ export enum Category {
   ETC = "ETC"
 }
 
-export type ActiveSection = "forum" | "qa" | "study" | "activity" | "news";
-
 export type UserRole = "guest" | "member";
 
 export interface PostCreateRequest {
@@ -26,15 +24,11 @@ export interface Post {
   title: string
   content: string
   author: string
-  avatar?: string
   category: Category
   likeCount: number
   comments: number
   viewCount: number
   timeAgo: string
-  isPinned: boolean
-  hashtags: string[]
-  rating?: number
   createdAt: string
   updatedAt: string
   boardId: number
@@ -67,7 +61,7 @@ export interface ApiResponse<T> {
 }
 
 export interface PaginatedResponse<T> {
-  data: T[]
+  content: T[]
   pagination: {
     currentPage: number
     totalPages: number

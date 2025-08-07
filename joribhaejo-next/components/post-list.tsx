@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Heart, Eye, Plus, Clock, MoreHorizontal, Edit, Trash2, Filter, Pin, Share2, Star } from "lucide-react"
+import { Heart, Eye, Plus, Clock, MoreHorizontal, Edit, Trash2, Filter, Share2 } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,18 +29,12 @@ enum Category {
 
 interface PostListProps {
   posts: Post[]
-  boards?: Board[]
-  likedPosts: Set<number>
-  pinnedPosts: Set<number>
   onPostClick: (id: number) => void
-  onView: (id: number) => void
   onCreatePost: () => void
   onLike?: (id: number) => void
   onEdit?: (id: number) => void
   onDelete?: (id: number) => void
-  onPin?: (id: number) => void
-  onUnpin?: (id: number) => void
-  activeSectionId?: number
+  activeBoardId?: number
   selectedCategory?: Category | "ALL"
   onCategoryChange?: (category: Category | "ALL") => void
 }
@@ -74,16 +68,12 @@ export function PostList({
   posts,
   boards,
   likedPosts,
-  pinnedPosts,
   onPostClick,
-  onView,
   onCreatePost,
   onLike,
   onEdit,
   onDelete,
-  onPin,
-  onUnpin,
-  activeSectionId,
+  activeBoardId,
   selectedCategory = "ALL",
   onCategoryChange
 }: PostListProps) {
@@ -128,10 +118,6 @@ export function PostList({
 
   // 고정된 게시글을 먼저 표시
   const sortedPosts = [...posts].sort((a, b) => {
-    const aPinned = pinnedPosts?.has(a.id) || false
-    const bPinned = pinnedPosts?.has(b.id) || false
-    if (aPinned && !bPinned) return -1
-    if (!aPinned && bPinned) return 1
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   })
 
@@ -143,11 +129,11 @@ export function PostList({
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-red-400 bg-clip-text text-transparent">
-                {activeSectionId ? getSectionLabel(activeSectionId) : "PC 하드웨어 커뮤니티"}
+                {activeBoardId ? getSectionLabel(activeBoardId) : "PC 하드웨어 커뮤니티"}
               </h1>
               <p className="text-gray-400 dark:text-gray-400 mt-2">
-                {activeSectionId 
-                  ? boards?.find(b => b.id === activeSectionId)?.description || "" 
+                {activeBoardId 
+                  ? boards?.find(b => b.id === activeBoardId)?.description || "" 
                   : "PC 하드웨어에 대한 정보를 공유하세요"
                 }
               </p>
@@ -190,9 +176,7 @@ export function PostList({
           {sortedPosts.map((post) => (
             <Card 
               key={post.id} 
-              className={`bg-gray-800 dark:bg-gray-800 border-gray-700 dark:border-gray-700 hover:border-gray-600 dark:hover:border-gray-600 transition-colors cursor-pointer ${
-                pinnedPosts?.has(post.id) ? 'border-blue-500/50 bg-blue-500/5' : ''
-              }`}
+              className={`bg-gray-800 dark:bg-gray-800 border-gray-700 dark:border-gray-700 hover:border-gray-600 dark:hover:border-gray-600 transition-colors cursor-pointer`}
               onClick={() => onPostClick(post.id)}
             >
               <CardHeader className="pb-4">
@@ -206,7 +190,6 @@ export function PostList({
                     </Avatar>
                     <div className="flex items-center gap-2">
                       <span className="font-medium text-gray-100 dark:text-gray-100">{post.author}</span>
-                      {pinnedPosts?.has(post.id) && <Star className="w-4 h-4 text-yellow-400 fill-current" />}
                     </div>
                     <span className="text-sm text-gray-400 dark:text-gray-400">•</span>
                     <span className="text-sm text-gray-400 dark:text-gray-400">{formatDate(post.createdAt)}</span>
@@ -228,20 +211,6 @@ export function PostList({
                     {post.content}
                   </p>
 
-                  {/* 해시태그 */}
-                  {post.hashtags && post.hashtags.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mt-3">
-                      {post.hashtags.map((tag, index) => (
-                        <span
-                          key={index}
-                          className="inline-block px-2 py-1 text-xs bg-gray-700 dark:bg-gray-700 text-gray-300 dark:text-gray-300 rounded-md border border-gray-600 dark:border-gray-600"
-                        >
-                          #{tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
                   {/* Engagement */}
                   <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-700 dark:border-gray-700">
                     <div className="flex items-center gap-6">
@@ -254,12 +223,12 @@ export function PostList({
                           onLike?.(post.id)
                         }}
                         className={`gap-2 transition-colors ${
-                          likedPosts.has(post.id)
+                          post.isLiked
                             ? "text-red-400 hover:text-red-300"
                             : "text-gray-400 dark:text-gray-400 hover:text-red-400"
                         }`}
                       >
-                        <Heart className={`w-4 h-4 ${likedPosts.has(post.id) ? "fill-current" : ""}`} />
+                        <Heart className={`w-4 h-4 ${post.isLiked ? "fill-current" : ""}`} />
                         <span className="text-sm font-medium">{post.likeCount}</span>
                       </Button>
 
@@ -271,27 +240,6 @@ export function PostList({
 
                     {/* Action Buttons */}
                     <div className="flex items-center gap-2">
-                      {/* Pin/Unpin Button */}
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          if (pinnedPosts?.has(post.id)) {
-                            onUnpin?.(post.id)
-                          } else {
-                            onPin?.(post.id)
-                          }
-                        }}
-                        className={`transition-colors ${
-                          pinnedPosts?.has(post.id)
-                            ? "text-yellow-400 hover:text-yellow-300"
-                            : "text-gray-400 dark:text-gray-400 hover:text-yellow-400"
-                        }`}
-                      >
-                        <Pin className={`w-4 h-4 ${pinnedPosts?.has(post.id) ? "fill-current" : ""}`} />
-                      </Button>
-
                       {/* Share Button */}
                       <Button
                         variant="ghost"
@@ -357,4 +305,4 @@ export function PostList({
       </div>
     </div>
   )
-} 
+}

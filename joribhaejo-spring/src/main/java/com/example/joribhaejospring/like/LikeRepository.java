@@ -16,4 +16,6 @@ public interface LikeRepository extends JpaRepository<Like, Integer> {
     List<Like> findAllByTargetTypeAndTargetId(Like.TargetType targetType, Integer postId);
 
     Integer countByTargetTypeAndTargetId(Like.TargetType targetType, Integer postId);
+
+    List<Like> findByUserAndTargetType(User user, Like.TargetType targetType);
 }

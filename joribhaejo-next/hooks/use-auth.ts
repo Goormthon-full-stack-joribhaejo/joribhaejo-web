@@ -13,3 +13,15 @@ export function useCurrentUser() {
     enabled: !!accessToken, // accessToken이 있을 때만 쿼리 실행
   })
 }
+
+export function useLikedPostIds() {
+  const accessToken = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
+
+  return useQuery<number[], Error>({
+    queryKey: ['likedPostIds'],
+    queryFn: () => userApi.getLikedPostIds(),
+    staleTime: 5 * 60 * 1000, // 5분
+    gcTime: 10 * 60 * 1000, // 10분
+    enabled: !!accessToken, // accessToken이 있을 때만 쿼리 실행
+  })
+}

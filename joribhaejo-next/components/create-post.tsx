@@ -14,14 +14,18 @@ interface CreatePostProps {
   initialData?: Post; // Optional initial data for editing
   onSubmit: (post: { boardId: number; title: string; content: string; category: Category }) => void;
   onCancel: () => void;
-  activeSection: number;
+  activeBoardId: number;
+  searchQuery?: string;
+  onSearchChange?: (query: string) => void;
 }
 
 export function CreatePost({
   initialData,
   onSubmit,
   onCancel,
-  activeSection,
+  activeBoardId,
+  searchQuery,
+  onSearchChange
 }: CreatePostProps) {
   const [title, setTitle] = useState(initialData?.title || "")
   const [content, setContent] = useState(initialData?.content || "")
@@ -36,7 +40,7 @@ export function CreatePost({
     if (isEdit) {
       // 수정 모드
       onSubmit({
-        boardId: activeSection,
+        boardId: activeBoardId,
         title: title.trim(),
         content: content.trim(),
         category: category,
@@ -44,7 +48,7 @@ export function CreatePost({
     } else {
       // 새 게시글 모드
       onSubmit({
-        boardId: activeSection,
+        boardId: activeBoardId,
         title: title.trim(),
         content: content.trim(),
         category: category,

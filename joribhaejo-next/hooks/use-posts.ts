@@ -74,11 +74,11 @@ export function useDeletePost() {
 }
 
 // 좋아요 토글 훅
-export function useToggleLike() {
+export function useTogglePostLike() {
   const queryClient = useQueryClient()
   
   return useMutation({
-    mutationFn: postApi.toggleLike,
+    mutationFn: postApi.togglePostLike,
     onSuccess: (data, postId) => {
       // 포스트 상세 정보 업데이트
       queryClient.setQueryData(['post', postId], (old: any) => {
@@ -88,56 +88,20 @@ export function useToggleLike() {
             data: {
               ...old.data,
               likeCount: data.data.likeCount,
+              isLiked: data.data.liked, // isLiked 상태 업데이트
             },
           }
         }
         return old
       })
-      
-      // 포스트 목록에서도 업데이트
-      queryClient.setQueriesData({ queryKey: ['posts'] }, (old: any) => {
-        if (old?.data) {
-          return {
-            ...old,
-                        data: old.data.map((post: Post) =>
-              post.id === postId ? { ...post, likeCount: data.data.likeCount } : post
-            ),
-          }
-        }
-        return old
-      })
-    },
-  })
-}
 
-// 조회수 증가 훅
-export function useIncrementViews() {
-  const queryClient = useQueryClient()
-  
-  return useMutation({
-    mutationFn: postApi.incrementViews,
-    onSuccess: (data, postId) => {
-      // 포스트 상세 정보 업데이트
-      queryClient.setQueryData(['post', postId], (old: any) => {
-        if (old?.data) {
-          return {
-            ...old,
-            data: {
-              ...old.data,
-              viewCount: data.data.viewCount,
-            },
-          }
-        }
-        return old
-      })
-      
       // 포스트 목록에서도 업데이트
       queryClient.setQueriesData({ queryKey: ['posts'] }, (old: any) => {
-        if (old?.data) {
+        if (old?.content) {
           return {
             ...old,
-                        data: old.data.map((post: Post) =>
-              post.id === postId ? { ...post, viewCount: data.data.viewCount } : post
+            content: old.content.map((post: Post) =>
+              post.id === postId ? { ...post, likeCount: data.data.likeCount, isLiked: data.data.liked } : post
             ),
           }
         }

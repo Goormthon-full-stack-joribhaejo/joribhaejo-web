@@ -6,12 +6,23 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class LikeService {
     private final LikeRepository likeRepository;
+
+    @Transactional(readOnly = true)
+    public List<Integer> getLikedIds(Like.TargetType targetType) {
+        User user = getCurrentUser();
+
+        List<Like> likes = likeRepository.findByUserAndTargetType(user, targetType);
+
+        return likes.stream().map(Like::getTargetId).collect(Collectors.toList());
+    }
 
     // 좋아요 상태 조회
     public boolean isLiked(Like.TargetType targetType, Integer targetId) {

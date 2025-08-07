@@ -6,23 +6,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/likes")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class LikeController {
     private final LikeService likeService;
 
     @Operation(
-            summary = "좋아요 상태 조회",
+            summary = "좋아요 누른 게시글 ID 조회",
             description = ""
     )
-    @GetMapping("/{targetId}")
-    public ResponseEntity<Boolean> checkLike(
-            @RequestParam Like.TargetType targetType,
-            @PathVariable Integer targetId
-    ) {
-        boolean liked = likeService.isLiked(targetType, targetId);
-        return ResponseEntity.ok(liked);
+    @GetMapping("/users/me/liked-post-ids")
+    public ResponseEntity<List<Integer>> getLikedPostIds() {
+        return ResponseEntity.ok(likeService.getLikedIds(Like.TargetType.POST));
     }
 
     @Operation(
@@ -30,7 +28,7 @@ public class LikeController {
             description = "",
             security = @SecurityRequirement(name = "Authorization")
     )
-    @PostMapping("/{targetId}/posts")
+    @PostMapping("/likes/{targetId}/posts")
     public ResponseEntity<String> togglePostLike(
             @PathVariable Integer targetId
     ) {
@@ -43,7 +41,7 @@ public class LikeController {
             description = "",
             security = @SecurityRequirement(name = "Authorization")
     )
-    @PostMapping("/{targetId}/comments")
+    @PostMapping("/likes/{targetId}/comments")
     public ResponseEntity<String> toggleCommentLike(
             @PathVariable Integer targetId
     ) {

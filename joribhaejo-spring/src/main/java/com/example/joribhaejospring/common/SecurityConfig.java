@@ -38,7 +38,7 @@ public class SecurityConfig {
                                 .requestMatchers("/error", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .requestMatchers("/api/posts/*", "/api/posts", "/api/posts/*/comments").permitAll()
                                 .requestMatchers("/api/likes", "/api/boards", "/api/boards/**").permitAll()
-                                .requestMatchers("/", "/login").permitAll()
+                                .requestMatchers("/", "/login", "/signup", "/index.html").permitAll()
                                 .requestMatchers("/static/**", "/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
                                 .anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
 

@@ -150,7 +150,7 @@ export default function Home() {
   if (showEditPost && selectedPostId) {
     if (singlePostLoading) return <div>Loading post details...</div>;
     if (singlePostError) return <div>Error loading post details.</div>;
-    if (!singlePost) return <PostList posts={posts} boards={boards} likedPosts={likedPosts} onPostClick={setSelectedPostId} onCreatePost={() => setShowCreatePost(true)} onLike={handleLike} onEdit={(id) => { setSelectedPostId(id); setShowEditPost(true) }} onDelete={handleDeleteFromList} activeBoardId={activeBoardId} selectedCategory={selectedCategory} onCategoryChange={setSelectedCategory} />;
+    if (!singlePost) return <PostList posts={posts} likedPostIds={likedPostIds} onPostClick={setSelectedPostId} onCreatePost={() => setShowCreatePost(true)} onLike={handleLike} onEdit={(id) => { setSelectedPostId(id); setShowEditPost(true) }} onDelete={handleDeleteFromList} activeBoardId={activeBoardId} selectedCategory={selectedCategory} onCategoryChange={setSelectedCategory} />;
     
     return <CreatePost 
         onSubmit={handleEditPost} 
@@ -172,7 +172,7 @@ export default function Home() {
   if (selectedPostId) {
     if (singlePostLoading) return <div>Loading post details...</div>;
     if (singlePostError) return <div>Error loading post details.</div>;
-    if (!singlePost) return <PostList posts={posts} boards={boards} likedPosts={likedPosts} onPostClick={setSelectedPostId} onCreatePost={() => setShowCreatePost(true)} onLike={handleLike} onEdit={(id) => { setSelectedPostId(id); setShowEditPost(true) }} onDelete={handleDeleteFromList} activeBoardId={activeBoardId} selectedCategory={selectedCategory} onCategoryChange={setSelectedCategory} />;
+    if (!singlePost) return <PostList posts={posts} likedPostIds={likedPostIds} onPostClick={setSelectedPostId} onCreatePost={() => setShowCreatePost(true)} onLike={handleLike} onEdit={(id) => { setSelectedPostId(id); setShowEditPost(true) }} onDelete={handleDeleteFromList} activeBoardId={activeBoardId} selectedCategory={selectedCategory} onCategoryChange={setSelectedCategory} />;
     
     return (
       <>
@@ -187,6 +187,7 @@ export default function Home() {
           setActiveBoardId={setActiveBoardId}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
+          likedPostIds={likedPostIds}
         />
         
         <DeleteConfirmDialog
@@ -220,8 +221,7 @@ export default function Home() {
       {mounted && (
         <PostList 
           posts={posts} 
-          boards={boards}
-          likedPosts={likedPosts}
+          likedPostIds={likedPostIds}
           onPostClick={(id) => {
             setSelectedPostId(id);
           }} 

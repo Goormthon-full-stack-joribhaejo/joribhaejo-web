@@ -29,6 +29,7 @@ enum Category {
 
 interface PostListProps {
   posts: Post[]
+  likedPostIds: number[]
   onPostClick: (id: number) => void
   onCreatePost: () => void
   onLike?: (id: number) => void
@@ -66,8 +67,7 @@ const categoryColors = {
 
 export function PostList({
   posts,
-  boards,
-  likedPosts,
+  likedPostIds,
   onPostClick,
   onCreatePost,
   onLike,

@@ -52,10 +52,18 @@ export function useUpdatePost() {
   return useMutation({
         mutationFn: ({ id, data }: { id: number; data: { title: string; content: string } }) => 
       postApi.updatePost(id, data),
-    onSuccess: (_, { id }) => {
-      // 관련 캐시 무효화
-      queryClient.invalidateQueries({ queryKey: ['posts'] })
-      queryClient.invalidateQueries({ queryKey: ['post', id] })
+        onSuccess: (data, postId) => {
+      queryClient.invalidateQueries({ queryKey: ['post', postId] });
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+
+      // likedPostIds 캐시 업데이트
+      queryClient.setQueryData(['likedPostIds'], (old: number[] | undefined) => {
+        if (data.data.liked) {
+          return [...(old || []), postId];
+        } else {
+          return (old || []).filter((id) => id !== postId);
+        }
+      });
     },
   })
 }

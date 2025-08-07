@@ -28,6 +28,7 @@ interface PostDetailProps {
   setActiveBoardId: (boardId: number) => void
   searchQuery?: string
   onSearchChange?: (query: string) => void
+  likedPostIds: number[]
 }
 
 export function PostDetail({
@@ -40,7 +41,8 @@ export function PostDetail({
   activeBoardId,
   setActiveBoardId,
   searchQuery,
-  onSearchChange
+  onSearchChange,
+  likedPostIds
 }: PostDetailProps) {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)

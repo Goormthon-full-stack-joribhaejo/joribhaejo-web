@@ -23,6 +23,7 @@ jobs:
         with:
           node-version: 18
           cache: 'pnpm'
+          cache-dependency-path: joribhaejo-next/pnpm-lock.yaml # 수정된 부분
 
       - name: Install dependencies (Next.js)
         working-directory: ./joribhaejo-next
@@ -35,7 +36,7 @@ jobs:
       - name: Copy Next.js build files to Spring Boot static resources
         run: |
           rm -rf ./joribhaejo-spring/src/main/resources/static/*
-          cp -r ./joribhaejo-next/.next/static ./joribhaejo-spring/src/main/resources/static/
+          cp -r ./joribhaejo-next/out ./joribhaejo-spring/src/main/resources/static/ # .next/static 대신 out 디렉토리 사용 (아래 추가 설명 참조)
 
       - name: Build Spring Boot JAR
         working-directory: ./joribhaejo-spring
